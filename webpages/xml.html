@@ -1,0 +1,45 @@
+<script type="text/javascript">
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        } else if (window.ActiveXObject) {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        } else {
+            document.write("XMLHTTP ERROR");
+            return;
+    }
+    
+    document.write("loading: " + xmlhttp.readyState + "<br>");
+    
+    function getinfo(id)
+    {
+        var url = "./viewimg.php?mode=xml&amp;no=" + id;
+        document.write(url, "<br>");
+
+        xmlhttp.open("GET", url);
+        xmlhttp.send(null);
+    }
+    
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var xmldata = xmlhttp.responseXML;
+            var dataurl = xmldata.getElementsByTagName('url');
+            document.write("xml data <br>");
+            document.write(xmldata.xml, "<br>");
+            document.write(xmldata.documentElement.nodeName);
+            document.write("URL: ", dataurl.item(0), "<br>");
+            document.write("User: ", xmldata.getElementsByTagName('user').item(0), "<br>");
+            document.write("Channel: ", xmldata.getElementsByTagName('channel'), "<br>");
+            document.write("Original: ", xmldata.getElementsByTagName('original'), "<br>");
+            return;
+        } else {
+            document.write("loading:");
+            document.write(xmlhttp.readyState + "<br>");
+        }
+    }
+</script>
+
+<form name="form1">
+    <input type="text" name="id" size="30"><br>
+    <input type="button" value="show" onClick="getinfo(document.form1.id.value)">
+</form>
